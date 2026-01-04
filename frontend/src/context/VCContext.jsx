@@ -1,0 +1,80 @@
+import { createContext, useContext, useEffect, useState, useCallback } from "react";
+import { useAuth } from "../context/AuthContext";
+
+const VCContext = createContext(null);
+
+export const VCContextProvider = ({ children }) => {
+    const { session } = useAuth();
+
+    const [vcs, setVcs] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+
+    const getVCs = async () => {
+        if (!session?.access_token) return;
+
+        setLoading(true);
+        setError(null);
+
+        try {
+            const res = await fetch("http://localhost:8000/vcs", {
+                headers: {
+                    Authorization: `Bearer ${session.access_token}`,
+                },
+            });
+
+            const data = await res.json();
+            console.log(data.data.data);
+            setVcs(data?.data.data || []);
+        } catch (err) {
+            console.error("Error fetching VCs:", err);
+            setError("Failed to load VCs");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const getVCById = useCallback(async (id) => {
+        if (!session?.access_token) return null;
+
+        try {
+            const res = await fetch(
+                `http://localhost:8000/vcs/${id}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${session.access_token}`,
+                    },
+                }
+            );
+
+            const data = await res.json();
+            return data?.data.data || null;
+        } catch (err) {
+            console.error("Error fetching VC:", err);
+            return null;
+        }
+    }, [session?.access_token]);
+
+    // Auto-fetch when session is ready
+    useEffect(() => {
+        getVCs();
+    }, [session?.access_token]);
+
+    return (
+        <VCContext.Provider
+            value={{
+                vcs,
+                loading,
+                error,
+                refetchVCs: getVCs,
+                getVCById,
+            }}
+        >
+            {children}
+        </VCContext.Provider>
+    );
+};
+
+export const useVCContext = () => {
+    return useContext(VCContext);
+};
