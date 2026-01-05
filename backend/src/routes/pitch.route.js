@@ -5,7 +5,7 @@ import { analyzePitch, deepResearch, getUserPitches, getPitch } from "../control
 
 const router = express.Router();
 
-router.post("/", authMiddleware, upload.single("pitch"), analyzePitch);
+router.post("/", authMiddleware, analyzePitch);
 router.get("/all", authMiddleware, getUserPitches);
 router.get("/:id", authMiddleware, getPitch);
 router.post("/research", authMiddleware, deepResearch);

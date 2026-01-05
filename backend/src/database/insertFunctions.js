@@ -1,6 +1,6 @@
 import supabase from "./supabase.js"
 
-export const insertPitch = async (pitch, user_id) => {
+export const insertPitch = async (pitch, user_id, fileUrl) => {
     try {
         const { data, error } = await supabase
             .from("startup_profiles")
@@ -26,7 +26,7 @@ export const insertPitch = async (pitch, user_id) => {
 
                     pitch_normalized: pitch,
                     user_id: user_id,
-
+                    pitch_url: fileUrl,
                     summary: pitch.summary,
 
                 }

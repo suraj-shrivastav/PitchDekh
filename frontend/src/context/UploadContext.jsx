@@ -1,5 +1,7 @@
 import { useState, createContext, useContext, useCallback } from "react";
 import { useAuth } from "./AuthContext";
+import { supabase } from "../libs/supabaseClient";
+import { v4 as uuid } from "uuid";
 
 const UploadContext = createContext();
 
@@ -67,17 +69,48 @@ export const UploadProvider = ({ children }) => {
         }
     }, [session?.access_token]);
 
-    const uploadPitch = async (formData) => {
+    const uploadFile = async (file) => {
+        if (!file) return;
+
+        const filePath =
+            file.name.slice(0, 20) +
+            "_" +
+            uuid().slice(0, 8);
+
+        const { data, error } = await supabase.storage
+            .from("user_pitch_decks")
+            .upload(filePath, file);
+
+        if (error) {
+            console.error(error);
+            setError(error.message);
+            return;
+        }
+
+        console.log("Upload data:", data);
+
+        const { data: publicData } = supabase.storage
+            .from("user_pitch_decks")
+            .getPublicUrl(data.path);
+
+        console.log("Public URL:", publicData.publicUrl);
+
+        return publicData.publicUrl;
+    };
+
+
+    const uploadPitch = async (file) => {
         try {
             setLoading(true);
             setError(null);
-
+            const fileUrl = await uploadFile(file);
             const response = await fetch("http://localhost:8000/pitches", {
                 method: "POST",
                 headers: {
+                    "Content-Type": "application/json",
                     Authorization: `Bearer ${session?.access_token}`,
                 },
-                body: formData,
+                body: JSON.stringify({ fileUrl: fileUrl }),
             });
 
             if (!response.ok) {
@@ -134,6 +167,7 @@ export const UploadProvider = ({ children }) => {
                 uploadVCLink,
                 file,
                 setFile,
+                uploadFile
             }}
         >
             {children}

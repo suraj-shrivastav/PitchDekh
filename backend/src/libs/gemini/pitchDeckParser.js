@@ -2,6 +2,10 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import { GoogleAIFileManager } from "@google/generative-ai/server";
 import { PITCH_NORMALIZE_SCHEMA } from "../system_prompts/pitch_normalize_schema.js";
 import { insertPitch } from "../../database/insertFunctions.js";
+import axios from "axios";
+import fs from "fs";
+import path from "path";
+import os from "os";
 
 const apiKey = process.env.GOOGLE_API_KEY;
 if (!apiKey) throw new Error("GOOGLE_API_KEY not found");
@@ -14,6 +18,22 @@ const waitFor = (ms) => new Promise((res) => setTimeout(res, ms));
 const cleanAndParseJSON = (text) => {
   const cleaned = text.replace(/```json/g, "").replace(/```/g, "").trim();
   return JSON.parse(cleaned);
+};
+
+const downloadFile = async (url, outputPath) => {
+  const writer = fs.createWriteStream(outputPath);
+  const response = await axios({
+    url,
+    method: 'GET',
+    responseType: 'stream'
+  });
+
+  response.data.pipe(writer);
+
+  return new Promise((resolve, reject) => {
+    writer.on('finish', resolve);
+    writer.on('error', reject);
+  });
 };
 
 async function uploadAndPoll(filePath, mimeType) {
@@ -63,9 +83,18 @@ IMPORTANT:
 - STRICT JSON ONLY
 `;
 
-export const parsePitchDeck = async (localFilePath, mimeType, userId) => {
+export const parsePitchDeck = async (fileUrl, mimeType, userId) => {
   let file;
+  let localFilePath;
   try {
+
+    // Create a temporary file path
+    const tempFileName = `pitch-${Date.now()}.pdf`;
+    localFilePath = path.join(os.tmpdir(), tempFileName);
+
+    console.log(`[Gemini] Downloading file from ${fileUrl} to ${localFilePath}`);
+    await downloadFile(fileUrl, localFilePath);
+
     file = await uploadAndPoll(localFilePath, mimeType);
 
     const model = genAI.getGenerativeModel({
@@ -92,7 +121,7 @@ export const parsePitchDeck = async (localFilePath, mimeType, userId) => {
     console.log("[Gemini] Analysis Stage 1 complete");
 
     // 1. Get the object { id, data }
-    const resultObject = await normalizePitch(result.response.text(), userId);
+    const resultObject = await normalizePitch(result.response.text(), userId, fileUrl);
 
     console.log("[Gemini] Analysis Stage 2 complete");
 
@@ -106,6 +135,17 @@ export const parsePitchDeck = async (localFilePath, mimeType, userId) => {
     console.error("Analysis Failed:", error);
     return null;
   } finally {
+    // Cleanup local temp file
+    if (localFilePath && fs.existsSync(localFilePath)) {
+      try {
+        fs.unlinkSync(localFilePath);
+        console.log("[Local] Deleted temp file:", localFilePath);
+      } catch (err) {
+        console.error("[Local] Failed to delete temp file:", err);
+      }
+    }
+
+    // Cleanup Gemini file
     if (file) {
       try {
         await fileManager.deleteFile(file.name);
@@ -147,7 +187,7 @@ IMPORTANT:
 - STRICT JSON ONLY
 `;
 
-const normalizePitch = async (pitchData, userId) => {
+const normalizePitch = async (pitchData, userId, fileUrl) => {
   const model = genAI.getGenerativeModel({
     model: "gemini-3-pro-preview",
     systemInstruction: NORMALIZE_SYSTEM_PROMPT,
@@ -167,7 +207,7 @@ const normalizePitch = async (pitchData, userId) => {
   // 1. Parse ONLY once here
   const parsedData = cleanAndParseJSON(result.response.text());
   // 2. Pass the OBJECT to your insert function (not the string)
-  const insertPitchId = await insertPitch(parsedData, userId);
+  const insertPitchId = await insertPitch(parsedData, userId, fileUrl);
 
   console.log("[Gemini] Inserted Pitch:", insertPitchId);
 

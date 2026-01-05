@@ -50,16 +50,17 @@ const MatchesPage = () => {
     const handleGenerateMatches = async () => {
         setIsGenerating(true);
         try {
-            const res = await fetch(`http://localhost:8000/match/vcs`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ pitchId }),
-            });
-
-            if (!res.ok) throw new Error("Match generation failed");
+            const loadData = async () => {
+                const res = await fetch(`http://localhost:8000/match/vcs`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ pitchId }),
+                });
+                if (!res.ok) throw new Error("Match generation failed");
+            }
 
             // Reload page to fetch new matches
-            window.location.reload();
+            loadData();
         } catch (err) {
             console.error("Focus Match Error:", err);
             setError("Failed to generate matches. Please try again.");

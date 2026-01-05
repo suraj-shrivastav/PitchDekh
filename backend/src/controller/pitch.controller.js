@@ -5,12 +5,18 @@ import supabase from "../database/supabase.js";
 export const analyzePitch = async (req, res) => {
     let start;
     try {
-        if (!req.file) {
-            return res.status(400).json({ error: "Please upload a PDF file." });
+        console.log(req.body);
+        const { fileUrl } = req.body;
+
+        if (!fileUrl) {
+            return res.status(400).json({ error: "Please provide a fileUrl." });
         }
-        console.log("File received");
+        console.log("File URL received:", fileUrl);
         start = Date.now();
-        const analysis = await parsePitchDeck(req.file.path, req.file.mimetype, req.user.id);
+
+        const mimeType = "application/pdf";
+
+        const analysis = await parsePitchDeck(fileUrl, mimeType, req.user.id);
         console.log("Analysis completed for user:", req.user.id);
         console.log("Time taken:", (Date.now() - start) / 1000, "seconds");
 

@@ -8,10 +8,12 @@ const UploadPitchModal = ({ open, onClose }) => {
     if (!open) return null;
 
     const handleSubmit = (e) => {
-        e.preventDefault();
-        const formData = new FormData();
-        formData.append("pitch", file);
-        uploadPitch(formData);
+        try {
+            e.preventDefault();
+            uploadPitch(file);
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     return (

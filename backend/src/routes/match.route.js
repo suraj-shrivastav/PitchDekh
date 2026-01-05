@@ -1,7 +1,7 @@
 import express from "express";
 const router = express.Router();
 
-import { getEfficientMatches } from "../controller/vcMatch.controller.js";
+import { getEfficientMatches } from "../controller/match.controller.js";
 
 
 router.post("/vcs", getEfficientMatches);
