@@ -83,6 +83,7 @@ export const getUserPitches = async (req, res) => {
             .select(`
                 id,
                 created_at,
+                pitch_url,
                 pitch_normalized->company
             `)
             .eq("user_id", req.user.id)
@@ -109,6 +110,7 @@ export const getPitch = async (req, res) => {
             .select(`
                 id,
                 created_at,
+                pitch_url,
                 pitch_normalized,
                 pitch_research
             `)

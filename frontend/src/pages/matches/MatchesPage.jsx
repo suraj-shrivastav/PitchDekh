@@ -50,17 +50,13 @@ const MatchesPage = () => {
     const handleGenerateMatches = async () => {
         setIsGenerating(true);
         try {
-            const loadData = async () => {
-                const res = await fetch(`http://localhost:8000/match/vcs`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ pitchId }),
-                });
-                if (!res.ok) throw new Error("Match generation failed");
-            }
-
-            // Reload page to fetch new matches
-            loadData();
+            const res = await fetch(`http://localhost:8000/match/vcs`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ pitchId }),
+            });
+            if (!res.ok) throw new Error("Match generation failed");
+            window.location.reload();
         } catch (err) {
             console.error("Focus Match Error:", err);
             setError("Failed to generate matches. Please try again.");
@@ -173,7 +169,7 @@ const MatchesPage = () => {
                 {other_matches.length > 0 && (
                     <section>
                         <h2 className="text-xl font-semibold text-muted-foreground mb-6">Other Candidates</h2>
-                        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                             {other_matches.map((match, i) => (
                                 <MatchCard
                                     key={i}

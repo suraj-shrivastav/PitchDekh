@@ -1,8 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { MapPin, Calendar, Layout, ArrowRight, Activity, Zap } from "lucide-react";
+import { MapPin, Calendar, Layout, ArrowRight, Activity, Zap, Download } from "lucide-react";
 
-const PitchCard = ({ company, id, pdfUrl }) => {
+const PitchCard = ({ company, id, pitch_url }) => {
     const { session } = useAuth();
     const navigate = useNavigate();
 
@@ -42,6 +42,18 @@ const PitchCard = ({ company, id, pdfUrl }) => {
                     <span className="px-3 py-1 rounded-lg bg-success/10 border border-success/20 text-success text-[10px] font-black uppercase tracking-widest">
                         {company.incorporationStatus}
                     </span>
+                    {pitch_url && (
+                        <a
+                            href={pitch_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            download
+                            className="p-1.5 rounded-lg bg-muted/50 border border-border/50 text-muted-foreground hover:bg-primary/10 hover:text-primary hover:border-primary/30 transition-all flex items-center justify-center"
+                            title="Download Pitch Deck"
+                        >
+                            <Download className="w-3.5 h-3.5" />
+                        </a>
+                    )}
                 </div>
 
                 {/* Body Content */}

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useUpload } from "../context/UploadContext";
 import { useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, Layout, Activity, ChevronRight } from "lucide-react";
+import { ArrowLeft, Layout, Activity, ChevronRight, Download } from "lucide-react";
 
 const Section = ({ title, children, className = "" }) => (
     <div className={`rounded-2xl bg-muted/40 border border-border/50 backdrop-blur-sm p-6 lg:p-8 space-y-6 shadow-xl ${className}`}>
@@ -43,7 +43,7 @@ const PitchAnalysis = () => {
     const navigate = useNavigate();
     const { fetchPitchData } = useUpload();
 
-    const [data, setData] = useState(null);
+    const [pitch, setPitch] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -52,7 +52,7 @@ const PitchAnalysis = () => {
             try {
                 setLoading(true);
                 const res = await fetchPitchData(id);
-                setData(res.pitch_normalized);
+                setPitch(res);
             } catch (err) {
                 console.error("Failed to fetch pitch", err);
                 setError("Failed to load pitch");
@@ -87,7 +87,7 @@ const PitchAnalysis = () => {
         );
     }
 
-    if (!data) {
+    if (!pitch) {
         return (
             <div className="min-h-screen bg-background flex items-center justify-center text-muted-foreground">
                 Pitch not found
@@ -108,7 +108,7 @@ const PitchAnalysis = () => {
         roadmap = {},
         risksAndAsks = {},
         summary,
-    } = data;
+    } = pitch.pitch_normalized || {};
 
     return (
         <div className="min-h-screen bg-background text-foreground transition-colors duration-500 px-6 lg:px-12 pt-28 pb-12">
@@ -137,6 +137,19 @@ const PitchAnalysis = () => {
                         </p>
                     </div>
                     <div className="flex gap-4">
+                        {pitch.pitch_url && (
+                            <a
+                                href={pitch.pitch_url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                download
+                                className="px-5 py-3 rounded-xl bg-muted/50 border border-border/50 text-muted-foreground hover:bg-muted/80 hover:text-foreground flex items-center gap-2 font-bold transition-all"
+                                title="Download Original Pitch Deck"
+                            >
+                                <Download size={18} />
+                                Download Pitch
+                            </a>
+                        )}
                         <button
                             onClick={() => navigate(`/pitches/${id}/research`)}
                             className="px-6 py-3 rounded-xl bg-primary hover:bg-primary/90 text-white text-sm font-bold transition-all"
