@@ -140,12 +140,12 @@ If a city/state is mentioned, you MUST infer and include the Country and Region.
 **C. FINANCIALS (CHECK SIZE)**
 All monetary values must be converted to **MILLIONS of USD** but stored as a **STRING**.
 * *Logic:* Convert raw value -> USD -> Millions -> String.
-* *Example:* Input "$500k" -> "0.5"
-* *Example:* Input "$2M" -> "2.0"
-* *Example:* Input "$5,000,000" -> "5.0"
-* *Example:* Input "₹8 Crores" -> "~1.0" (Approx conversion)
-* *Example:* Input "€100M" -> "100.0"
-* *Example:* Input "£50M" -> "50.0"
+* *Example:* Input "$500k" -> "0.5M"
+* *Example:* Input "$2M" -> "2.0M"
+* *Example:* Input "$5,000,000" -> "5.0M"
+* *Example:* Input "₹8 Crores" -> "~1.0M" (Approx conversion)
+* *Example:* Input "€100M" -> "100.0M"
+* *Example:* Input "£50M" -> "50.0M"
 
 **D. STAGE DEFINITIONS**
 Standardize stages to: "Pre-Seed", "Seed", "Series A", "Series B", "Series C+", "Growth".
