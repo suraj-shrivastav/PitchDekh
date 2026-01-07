@@ -2,6 +2,7 @@ import { useState, createContext, useContext, useCallback } from "react";
 import { useAuth } from "./AuthContext";
 import { supabase } from "../libs/supabaseClient";
 import { v4 as uuid } from "uuid";
+import { api } from "../libs/api";
 
 const UploadContext = createContext();
 
@@ -20,52 +21,31 @@ export const UploadProvider = ({ children }) => {
             setLoading(true);
             setError(null);
 
-            const response = await fetch("http://localhost:8000/pitches/all", {
-                headers: {
-                    Authorization: `Bearer ${session.access_token}`,
-                },
-            });
+            const data = await api.get("/pitches/all");
 
-            if (!response.ok) {
-                throw new Error("Failed to fetch pitches");
-            }
-
-            const result = await response.json();
-            console.log(result.data);
-            if (result.success) {
-                setPitches(result.data);
+            if (data.success) {
+                setPitches(data.data);
             }
         } catch (err) {
             console.error(err);
-            setError(err.message);
+            setError(err.response?.data?.message || err.message);
         } finally {
             setLoading(false);
         }
     }, [session?.access_token]);
 
     const fetchPitchData = useCallback(async (id) => {
+        if (!session?.access_token) return;
+
         try {
-            // const pitchUrl = `http://localhost:8000/pitches/${id}`;
-            // console.log(pitchUrl);
+            const data = await api.get(`/pitches/${id}`);
 
-            const response = await fetch(`http://localhost:8000/pitches/${id}`, {
-                headers: {
-                    Authorization: `Bearer ${session?.access_token}`,
-                },
-            });
-
-            if (!response.ok) {
-                throw new Error("Failed to fetch pitch data");
-            }
-
-            const result = await response.json();
-            console.log(result.data);
-            if (result.success) {
-                return result.data;
+            if (data.success) {
+                return data.data;
             }
         } catch (err) {
             console.error(err);
-            setError(err.message);
+            setError(err.response?.data?.message || err.message);
         }
     }, [session?.access_token]);
 
@@ -73,56 +53,42 @@ export const UploadProvider = ({ children }) => {
         if (!file) return;
 
         const filePath =
-            file.name.slice(0, 20) +
-            "_" +
-            uuid().slice(0, 8);
+            file.name.slice(0, 20) + "_" + uuid().slice(0, 8);
 
         const { data, error } = await supabase.storage
             .from("user_pitch_decks")
             .upload(filePath, file);
 
         if (error) {
-            console.error(error);
             setError(error.message);
             return;
         }
-
-        console.log("Upload data:", data);
 
         const { data: publicData } = supabase.storage
             .from("user_pitch_decks")
             .getPublicUrl(data.path);
 
-        console.log("Public URL:", publicData.publicUrl);
-
         return publicData.publicUrl;
     };
 
-
     const uploadPitch = async (file) => {
+        if (!session?.access_token) return;
+
         try {
             setLoading(true);
             setError(null);
+
             const fileUrl = await uploadFile(file);
-            const response = await fetch("http://localhost:8000/pitches", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${session?.access_token}`,
-                },
-                body: JSON.stringify({ fileUrl: fileUrl }),
+
+            const data = await api.post("/pitches", {
+                fileUrl,
             });
 
-            if (!response.ok) {
-                throw new Error("Upload failed");
-            }
-
-            const data = await response.json();
             if (data.success) {
-                await fetchPitches(); // refresh list
+                await fetchPitches();
             }
         } catch (err) {
-            setError(err.message);
+            setError(err.response?.data?.message || err.message);
         } finally {
             setLoading(false);
         }
@@ -133,22 +99,11 @@ export const UploadProvider = ({ children }) => {
             setLoading(true);
             setError(null);
 
-            const response = await fetch("http://localhost:8000/vcs/extract", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${session?.access_token}`,
-                },
-                body: JSON.stringify({ url: vcLink }),
+            return await api.post("/vcs/extract", {
+                url: vcLink,
             });
-
-            if (!response.ok) {
-                throw new Error("VC extraction failed");
-            }
-
-            return await response.json();
         } catch (err) {
-            setError(err.message);
+            setError(err.response?.data?.message || err.message);
             throw err;
         } finally {
             setLoading(false);
@@ -167,7 +122,7 @@ export const UploadProvider = ({ children }) => {
                 uploadVCLink,
                 file,
                 setFile,
-                uploadFile
+                uploadFile,
             }}
         >
             {children}

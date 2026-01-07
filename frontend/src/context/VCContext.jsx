@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState, useCallback } from "react";
 import { useAuth } from "../context/AuthContext";
+import { api } from "../libs/api.js";
 
 const VCContext = createContext(null);
 
@@ -17,14 +18,7 @@ export const VCContextProvider = ({ children }) => {
         setError(null);
 
         try {
-            const res = await fetch("http://localhost:8000/vcs", {
-                headers: {
-                    Authorization: `Bearer ${session.access_token}`,
-                },
-            });
-
-            const data = await res.json();
-            console.log(data.data.data);
+            const data = await api.get("/vcs");
             setVcs(data?.data.data || []);
         } catch (err) {
             console.error("Error fetching VCs:", err);
@@ -38,16 +32,7 @@ export const VCContextProvider = ({ children }) => {
         if (!session?.access_token) return null;
 
         try {
-            const res = await fetch(
-                `http://localhost:8000/vcs/${id}`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${session.access_token}`,
-                    },
-                }
-            );
-
-            const data = await res.json();
+            const data = await api.get(`/vcs/${id}`);
             return data?.data.data || null;
         } catch (err) {
             console.error("Error fetching VC:", err);
@@ -66,7 +51,7 @@ export const VCContextProvider = ({ children }) => {
                 vcs,
                 loading,
                 error,
-                refetchVCs: getVCs,
+                getVCs,
                 getVCById,
             }}
         >
