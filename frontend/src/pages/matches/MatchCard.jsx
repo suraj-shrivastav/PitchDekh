@@ -1,8 +1,9 @@
 import React from 'react';
 
 const MatchCard = ({ match, onClick }) => {
+    if (!match) return null;
     const { score, vc, ai_analysis } = match;
-    const { firm_name, logo_url } = vc.identity;
+    const { firm_name, logo_url } = vc?.identity || {};
     const { one_line_verdict, match_tier } = ai_analysis?.summary || {};
 
     // Color coding for score
@@ -35,7 +36,7 @@ const MatchCard = ({ match, onClick }) => {
                         {logo_url ? (
                             <img src={logo_url} alt={firm_name} className="w-full h-full object-contain p-2" />
                         ) : (
-                            <span className="text-xl font-bold text-muted-foreground">{firm_name.charAt(0)}</span>
+                            <span className="text-xl font-bold text-muted-foreground">{firm_name?.charAt(0)}</span>
                         )}
                     </div>
                     <div>

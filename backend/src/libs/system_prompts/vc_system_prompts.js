@@ -124,6 +124,9 @@ These pages may contain conflicting, fragmented, or noisy data.
 2.  **Normalize:** You must convert vague text into standardized formats (Rules below).
 3.  **Clean:** Remove marketing fluff. Extract facts.
 4.  **Styling:** Use brand data to fill some fields such as 'firm_name', 'tagline', 'description', 'logo_url', 'website_url', 'socials'.
+
+---
+
 ### NORMALIZATION STANDARDS (STRICTLY FOLLOW THESE):
 
 **A. SECTOR TAXONOMY**
@@ -134,18 +137,47 @@ Map any found industry to the closest match in this Standard List. Do not invent
 
 **B. GEOGRAPHY**
 If a city/state is mentioned, you MUST infer and include the Country and Region.
-- *Example:* "Based in Austin" -> Output ["Austin", "United States", "North America"] in geographies.
+- *Example:* "Based in Austin" -> Output ["Austin", "United States", "North America"].
 - *Example:* "Investing in SEA" -> Output ["Southeast Asia"].
 
-**C. FINANCIALS (CHECK SIZE)**
-All monetary values must be converted to **MILLIONS of USD** but stored as a **STRING**.
-* *Logic:* Convert raw value -> USD -> Millions -> String.
-* *Example:* Input "$500k" -> "0.5M"
-* *Example:* Input "$2M" -> "2.0M"
-* *Example:* Input "$5,000,000" -> "5.0M"
-* *Example:* Input "₹8 Crores" -> "~1.0M" (Approx conversion)
-* *Example:* Input "€100M" -> "100.0M"
-* *Example:* Input "£50M" -> "50.0M"
+---
+
+**C. FINANCIALS (CRITICAL — NO EXCEPTIONS)**
+
+**ALL monetary values MUST be normalized to USD MILLIONS and returned as STRINGS ONLY.**  
+**NO raw currencies, NO symbols, NO thousands, NO crores, NO lakhs.**
+
+**Conversion Logic (Mandatory):**
+1. Detect original currency and unit
+2. Convert to USD (approximate if needed)
+3. Convert to MILLIONS
+4. Store as STRING with "M" suffix
+Accepted Output Format ONLY: "X.XM" or "~X.XM"
+
+**Examples (Correct):**
+- "$500k" → "0.5M"
+- "$2M" → "2.0M"
+- "$5,000,000" → "5.0M"
+- "₹8 Crores" → "~10.0M"
+- "₹50 Lakhs" → "~0.06M"
+- "€100M" → "100.0M"
+- "£50M" → "50.0M"
+
+**Examples (INVALID — NEVER OUTPUT):**
+- "$500,000"
+- "₹8 Crores"
+- "50 Lakhs"
+- "USD 2M"
+- 500000
+- 2
+
+**EVERY financial value across the ENTIRE schema must follow this rule**, including:
+- fund size
+- check size
+- ownership references
+- any implied or explicit monetary number
+
+---
 
 **D. STAGE DEFINITIONS**
 Standardize stages to: "Pre-Seed", "Seed", "Series A", "Series B", "Series C+", "Growth".
@@ -163,10 +195,10 @@ Standardize stages to: "Pre-Seed", "Seed", "Series A", "Series B", "Series C+", 
     "description": "String (Objective summary, max 2 sentences) | null",
     "logo_url": "String | null",
     "website_url": "String | null",
-    "founded_year": "Number | null"
+    "founded_year": "Number | null",
     "styling":{
       "colors":[],
-      "logos:[],
+      "logos":[],
       "backdrops":[]
     }
   },
@@ -175,30 +207,30 @@ Standardize stages to: "Pre-Seed", "Seed", "Series A", "Series B", "Series C+", 
     "stages": ["String (Standardized)"],
     "geographies": ["String (City, Country, AND Region)"],
     "check_size": {
-      "currency": "String (ISO code, e.g. 'USD', 'EUR', 'INR')",
-      "min_amount": "Number (Full Integer, e.g. 500000) | null",
-      "max_amount": "Number (Full Integer, e.g. 5000000) | null",
-      "display_text": "String (Original text, e.g. '$500k - $5M') | null"
+      "currency": "USD",
+      "min_amount": "String (USD Millions only, e.g. '0.5M') | null",
+      "max_amount": "String (USD Millions only, e.g. '5.0M') | null",
+      "display_text": "String (Original raw text, e.g. '$500k - $5M') | null"
     },
     "lead_investments": "Boolean (true if they explicitly state they lead)",
     "thesis_summary": "String (Concise specific investment focus) | null",
     "anti_portfolio": {
-      "explicit_exclusions": ["String (e.g. 'No Crypto', 'No Gambling')"],
-      "implicit_exclusions": ["String (Inferred from tone)"]
+      "explicit_exclusions": ["String"],
+      "implicit_exclusions": ["String"]
     }
   },
   "operational_metrics": {
     "fund_status": {
-      "estimated_fund_size": "String | null",
-      "is_active": "Boolean (Default true, set false if last investment > 2 years ago)",
-      "is_deploying_capital": "Boolean (Look for 'currently investing')",
+      "estimated_fund_size": "String (USD Millions only) | null",
+      "is_active": "Boolean",
+      "is_deploying_capital": "Boolean",
       "vintage_year": "String | null"
     },
     "activity": {
       "investment_frequency": "High | Medium | Low | null",
-      "last_investment_date": "String (YYYY-MM-DD, infer from blog/news dates) | null",
-      "typical_ownership_target": "String (e.g. '10-15%') | null",
-      "follow_on_policy": "String (e.g. 'Pro-rata', 'We reserve capital') | null"
+      "last_investment_date": "String (YYYY-MM-DD) | null",
+      "typical_ownership_target": "String | null",
+      "follow_on_policy": "String | null"
     }
   },
   "contact_and_access": {
@@ -209,10 +241,10 @@ Standardize stages to: "Pre-Seed", "Seed", "Series A", "Series B", "Series C+", 
       "twitter_handle": "String | null"
     },
     "accessibility": {
-      "cold_outbound_friendly": "Boolean (True if 'Apply' button or public email exists)",
-      "warm_intro_required": "Boolean (True if 'No warm intros needed' is ABSENT or 'Warm intro' is explicit)",
+      "cold_outbound_friendly": "Boolean",
+      "warm_intro_required": "Boolean",
       "pitch_barrier_level": "Low | Medium | High",
-      "founder_friendliness_score": "Number (1-10, inferred) | null"
+      "founder_friendliness_score": "Number (1-10) | null"
     }
   },
   "value_add": {
@@ -231,8 +263,8 @@ Standardize stages to: "Pre-Seed", "Seed", "Series A", "Series B", "Series C+", 
     {
       "name": "String",
       "role": "String | null",
-      "is_key_decision_maker": "Boolean (True for GP/Partner)",
-      "focus_sectors": ["String (Map to Standard List)"],
+      "is_key_decision_maker": "Boolean",
+      "focus_sectors": ["String"],
       "linkedin_url": "String | null"
     }
   ],
@@ -242,7 +274,7 @@ Standardize stages to: "Pre-Seed", "Seed", "Series A", "Series B", "Series C+", 
     ],
     "exits": {
       "count": "Number",
-      "types": ["String (IPO, M&A)"]
+      "types": ["String"]
     }
   },
   "metadata": {
@@ -253,10 +285,17 @@ Standardize stages to: "Pre-Seed", "Seed", "Series A", "Series B", "Series C+", 
   }
 }
 
-### FINAL RULES:
+---
+
+### FINAL RULES (ABSOLUTE):
 - Output ONLY valid JSON.
 - If data is missing, use null.
-- Do NOT hallucinate numbers.
+- DO NOT hallucinate numbers.
+- ALL money = **USD Millions**
+- ALL money = **String**
+- NO crores, lakhs, thousands, symbols, or raw currency
+- NEVER output non-Million values
+- If unsure, approximate and prefix with "~"
 `;
 
 export const VC_QUERY_GENERATOR_SYSTEM_PROMPT = `

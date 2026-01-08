@@ -19,9 +19,9 @@ const VCCard = ({ vc }) => {
 
             {/* Body */}
             <div className="relative z-10 px-8 pb-8 flex flex-col flex-1">
-                {/* Logo Overlap Container */}
+                {/* Logo Overlap Container */}  
                 <div className="relative -mt-10 mb-6 flex items-end justify-between">
-                    <div className="h-20 w-20 rounded-3xl bg-background border border-border/10 shadow-2xl flex items-center justify-center overflow-hidden ring-4 ring-background/50 group-hover:scale-105 transition-transform duration-500">
+                    <div className="h-20 w-20 rounded-3xl bg-none border border-border/10 shadow-2xl flex items-center justify-center overflow-hidden ring-4 ring-background/50 group-hover:scale-105 transition-transform duration-500">
                         {vc.identity.logo_url ? (
                             <img
                                 src={vc.identity.logo_url}

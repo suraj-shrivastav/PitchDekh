@@ -154,7 +154,7 @@ const MatchesPage = () => {
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {top_matches.map((match, i) => (
+                            {top_matches.filter(m => m).map((match, i) => (
                                 <MatchCard
                                     key={i}
                                     match={match}
@@ -170,7 +170,7 @@ const MatchesPage = () => {
                     <section>
                         <h2 className="text-xl font-semibold text-muted-foreground mb-6">Other Candidates</h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                            {other_matches.map((match, i) => (
+                            {other_matches.filter(m => m).map((match, i) => (
                                 <MatchCard
                                     key={i}
                                     match={match}
