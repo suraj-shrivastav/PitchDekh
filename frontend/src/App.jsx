@@ -37,11 +37,9 @@ const App = () => {
         <Route
           path="/"
           element={
-            <ProtectedRoute>
-              <div>
-                <HeroPage />
-              </div>
-            </ProtectedRoute>
+            <div>
+              <HeroPage />
+            </div>
           }
         />
         <Route

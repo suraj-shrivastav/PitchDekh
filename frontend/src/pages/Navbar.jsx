@@ -1,7 +1,7 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useState, useEffect } from "react";
-import { LogOut, User, Menu, X, LayoutDashboard, Database, Zap, Activity, Sun, Moon } from "lucide-react";
+import { LogOut, User, Menu, X, LayoutDashboard, Database, Zap, Activity, Sun, Moon, Download, FileText, ChevronDown } from "lucide-react";
 import { useTheme } from "../context/ThemeContext";
 
 const Navbar = () => {
@@ -10,6 +10,16 @@ const Navbar = () => {
     const navigate = useNavigate();
     const [open, setOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
+    const [samplesDropdownOpen, setSamplesDropdownOpen] = useState(false);
+
+    // Sample pitches data
+    const samplePitches = [
+        { name: "AirBnB Sample", file: "AirBnBSample.pdf", description: "Vacation rental platform" },
+        { name: "GPT Sample Pitch", file: "GPTSamplePitch.pdf", description: "AI language model" },
+        { name: "NeuralBridge Sample", file: "NeuralBridgeSample.pdf", description: "Neural interface technology" },
+        { name: "Uber Sample", file: "UberSample.pdf", description: "Ride-sharing platform" },
+        { name: "UrbanBite Sample", file: "UrbanBiteSample.pdf", description: "Food delivery service" },
+    ];
 
     useEffect(() => {
         const handleScroll = () => {
@@ -23,6 +33,14 @@ const Navbar = () => {
         setOpen(false);
         await logout();
         navigate("/login");
+    };
+
+    const handleDownload = (fileName) => {
+        const link = document.createElement('a');
+        link.href = `/sample-pitches/${fileName}`;
+        link.download = fileName;
+        link.click();
+        setSamplesDropdownOpen(false);
     };
 
     const navLinkClass = ({ isActive }) =>
@@ -55,6 +73,45 @@ const Navbar = () => {
 
                 {/* DESKTOP NAV */}
                 <div className="hidden md:flex items-center gap-8">
+                    {/* Sample Pitches Dropdown */}
+                    <div
+                        className="relative"
+                        onMouseEnter={() => setSamplesDropdownOpen(true)}
+                        onMouseLeave={() => setSamplesDropdownOpen(false)}
+                    >
+                        <button className="relative px-3 py-2 text-sm font-semibold tracking-tight transition-all duration-300 flex items-center gap-2 text-muted-foreground hover:text-foreground group">
+                            <Download size={18} className="text-slate-500" />
+                            <span>Sample Pitches</span>
+                            <ChevronDown size={16} className={`transition-transform duration-300 ${samplesDropdownOpen ? 'rotate-180' : ''}`} />
+                        </button>
+
+                        {/* Dropdown Menu */}
+                        <div className={`absolute top-full left-0 mt-2 w-72 bg-background/95 backdrop-blur-xl border border-border/50 rounded-2xl shadow-2xl shadow-primary/10 overflow-hidden transition-all duration-300 ${samplesDropdownOpen ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 -translate-y-2 pointer-events-none'
+                            }`}>
+                            <div className="p-3 border-b border-border/50 bg-muted/30">
+                                <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Download Sample Pitches</p>
+                            </div>
+                            <div className="p-2 max-h-80 overflow-y-auto">
+                                {samplePitches.map((pitch, index) => (
+                                    <button
+                                        key={index}
+                                        onClick={() => handleDownload(pitch.file)}
+                                        className="w-full flex items-start gap-3 p-3 rounded-xl hover:bg-muted/50 transition-all text-left group/item"
+                                    >
+                                        <div className="flex-shrink-0 h-10 w-10 rounded-lg bg-blue-500/10 flex items-center justify-center group-hover/item:bg-blue-500/20 transition-all">
+                                            <FileText size={20} className="text-blue-400" />
+                                        </div>
+                                        <div className="flex-1 min-w-0">
+                                            <p className="text-sm font-semibold text-foreground truncate">{pitch.name}</p>
+                                            <p className="text-xs text-muted-foreground">{pitch.description}</p>
+                                        </div>
+                                        <Download size={16} className="text-muted-foreground opacity-0 group-hover/item:opacity-100 transition-opacity flex-shrink-0 mt-2" />
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+
                     {user ? (
                         <>
                             <div className="flex items-center gap-7">
@@ -145,7 +202,30 @@ const Navbar = () => {
             {/* MOBILE MENU OVERLAY */}
             <div className={`fixed inset-0 top-0 left-0 w-full h-screen bg-background/95 backdrop-blur-xl z-40 transition-all duration-500 md:hidden ${open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
                 }`}>
-                <div className="pt-24 px-6 space-y-8 max-w-sm mx-auto">
+                <div className="pt-24 px-6 space-y-8 max-w-sm mx-auto overflow-y-auto max-h-[calc(100vh-6rem)]">
+                    {/* Sample Pitches Section - Always Visible */}
+                    <div className="space-y-3">
+                        <p className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] px-4">Sample Pitches</p>
+                        <div className="grid gap-2">
+                            {samplePitches.map((pitch, index) => (
+                                <button
+                                    key={index}
+                                    onClick={() => { handleDownload(pitch.file); setOpen(false); }}
+                                    className="flex items-start gap-3 p-4 rounded-2xl bg-muted/40 border border-border/50 text-foreground hover:bg-muted/60 transition-all text-left"
+                                >
+                                    <div className="h-10 w-10 rounded-xl bg-blue-500/10 flex items-center justify-center flex-shrink-0">
+                                        <FileText size={20} className="text-blue-400" />
+                                    </div>
+                                    <div className="flex-1 min-w-0">
+                                        <p className="text-sm font-semibold truncate">{pitch.name}</p>
+                                        <p className="text-xs text-muted-foreground">{pitch.description}</p>
+                                    </div>
+                                    <Download size={16} className="text-muted-foreground flex-shrink-0 mt-2" />
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
                     {user ? (
                         <>
                             <div className="space-y-3">
