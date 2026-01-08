@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useUpload } from "../context/UploadContext";
 import { useAuth } from "../context/AuthContext";
 import { ArrowLeft, RefreshCw, MapPin, Zap, ChevronRight, BarChart3, TrendingUp, Info, Brain } from "lucide-react";
+import { api } from "../libs/api";
 
 const Section = ({ title, children, className = "" }) => (
     <div className={`rounded-2xl bg-muted/40 border border-border/50 backdrop-blur-sm p-6 lg:p-8 space-y-6 shadow-xl ${className}`}>
@@ -66,15 +67,10 @@ const MarketResearch = () => {
     const handleGenerateResearch = async () => {
         try {
             setGenerating(true);
-            const res = await fetch(`http://localhost:8000/pitches/research`, {
-                method: "POST",
-                headers: {
-                    Authorization: `Bearer ${session.access_token}`,
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ pitchId: id }),
-            });
-            const result = await res.json();
+            const res = await api.post("/pitches/research", {
+                pitchId: id
+            })
+            const result = await res.data;
             if (result.success) {
                 setData(result.data);
             }

@@ -1,7 +1,8 @@
 import axios from "axios";
 import { supabase } from "./supabaseClient";
 
-const API_BASE_URL = import.meta.env.VITE_BACKEND_URL || "https://pitchdekh-backend.onrender.com";
+const API_BASE_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:8000/";
+// const API_BASE_URL = "http://localhost:8000/"
 if (API_BASE_URL) {
     console.log("Base URL is: ", API_BASE_URL)
 } else {

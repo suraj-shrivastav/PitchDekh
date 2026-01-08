@@ -5,6 +5,7 @@ import MatchCard from './MatchCard';
 import MatchDetailsModal from './MatchDetailsModal';
 import { Sparkles, Loader2, ArrowLeft, RefreshCw } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { api } from '../../libs/api.js';
 
 const MatchesPage = () => {
     const { id: pitchId } = useParams();
@@ -49,17 +50,22 @@ const MatchesPage = () => {
 
     const handleGenerateMatches = async () => {
         setIsGenerating(true);
+        setError(null);
+
         try {
-            const res = await fetch(`http://localhost:8000/match/vcs`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ pitchId }),
-            });
-            if (!res.ok) throw new Error("Match generation failed");
+            const res = await api.post("/match/vcs", { pitchId });
+            if (!res) {
+                throw new Error("Match generation failed");
+            }
             window.location.reload();
         } catch (err) {
             console.error("Focus Match Error:", err);
-            setError("Failed to generate matches. Please try again.");
+            setError(
+                err.response?.data?.message ||
+                err.message ||
+                "Failed to generate matches. Please try again."
+            );
+        } finally {
             setIsGenerating(false);
         }
     };

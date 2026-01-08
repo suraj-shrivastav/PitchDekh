@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { MapPin, Calendar, Layout, ArrowRight, Activity, Zap, Download } from "lucide-react";
+import { api } from "../libs/api";
 
 const PitchCard = ({ company, id, pitch_url }) => {
     const { session } = useAuth();
@@ -8,15 +9,10 @@ const PitchCard = ({ company, id, pitch_url }) => {
 
     const handleMatchClick = async (pitchId) => {
         try {
-            const res = await fetch(`http://localhost:8000/match/vcs`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ pitchId }),
-            });
-            // console.log(res);
-            const data = await res.json();
+            const res = await api.post(`/match/vcs`, {
+                pitchId
+            })
+            const data = await res.data;
             console.log(data);
         } catch (error) {
             console.error("Error fetching match data:", error);
