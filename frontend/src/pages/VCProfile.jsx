@@ -122,8 +122,8 @@ const VCProfile = () => {
             <div className="min-h-screen flex items-center justify-center bg-background">
                 <div className="text-center space-y-6">
                     <div className="relative w-16 h-16 mx-auto">
-                        <div className="absolute inset-0 border-2 border-sky-500/20 rounded-full"></div>
-                        <div className="absolute inset-0 border-2 border-sky-400 border-t-transparent rounded-full animate-spin"></div>
+                        <div className="absolute inset-0 border-2 border-accent/20 rounded-full"></div>
+                        <div className="absolute inset-0 border-2 border-accent border-t-transparent rounded-full animate-spin"></div>
                     </div>
                     <p className="text-muted-foreground text-[10px] font-black uppercase tracking-[0.3em] animate-pulse">
                         Synchronizing Intelligence
@@ -158,7 +158,7 @@ const VCProfile = () => {
                 {/* ---------- Header ---------- */}
                 <header className="flex flex-col lg:flex-row justify-between items-start gap-10">
                     <div className="flex flex-col sm:flex-row gap-8 items-start sm:items-center">
-                        <div className="group relative w-24 h-24 rounded-3xl border border-border/10 bg-muted/50 flex items-center justify-center backdrop-blur-xl transition-all duration-500 hover:border-sky-500/40 hover:bg-muted/80">
+                        <div className="group relative w-24 h-24 rounded-3xl border border-border/10 bg-muted/50 flex items-center justify-center backdrop-blur-xl transition-all duration-500 hover:border-accent/40 hover:bg-muted/80">
                             {identity.logo_url ? (
                                 <img
                                     src={identity.logo_url}
@@ -166,11 +166,11 @@ const VCProfile = () => {
                                     className="w-12 h-12 object-contain transition-transform duration-500 group-hover:scale-110"
                                 />
                             ) : (
-                                <span className="text-3xl font-bold text-sky-400 transition-transform duration-500 group-hover:scale-110">
+                                <span className="text-3xl font-bold text-accent transition-transform duration-500 group-hover:scale-110">
                                     {identity.firm_name?.[0]}
                                 </span>
                             )}
-                            <div className="absolute inset-0 bg-sky-400/20 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
+                            <div className="absolute inset-0 bg-accent/20 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
                         </div>
 
                         <div className="space-y-4">
@@ -277,7 +277,7 @@ const VCProfile = () => {
                         <GlassCard title="Strategic Focus">
                             <div className="grid sm:grid-cols-2 gap-10">
                                 <div>
-                                    <p className="text-[10px] font-black uppercase tracking-[0.25em] text-sky-400/60 mb-4">Sectors</p>
+                                    <p className="text-[10px] font-black uppercase tracking-[0.25em] text-accent/60 mb-4">Sectors</p>
                                     <div className="flex flex-wrap gap-2">
                                         {investment_criteria.sectors?.map((s) => (
                                             <Badge key={s} variant="indigo">{s}</Badge>
@@ -285,7 +285,7 @@ const VCProfile = () => {
                                     </div>
                                 </div>
                                 <div>
-                                    <p className="text-[10px] font-black uppercase tracking-[0.25em] text-sky-400/60 mb-4">Stages</p>
+                                    <p className="text-[10px] font-black uppercase tracking-[0.25em] text-accent/60 mb-4">Stages</p>
                                     <div className="flex flex-wrap gap-2">
                                         {investment_criteria.stages?.map((s) => (
                                             <Badge key={s}>{s}</Badge>
@@ -293,11 +293,11 @@ const VCProfile = () => {
                                     </div>
                                 </div>
                                 <div className="sm:col-span-2">
-                                    <p className="text-[10px] font-black uppercase tracking-[0.25em] text-sky-400/60 mb-4">Geographic Presence</p>
+                                    <p className="text-[10px] font-black uppercase tracking-[0.25em] text-accent/60 mb-4">Geographic Presence</p>
                                     <div className="flex flex-wrap gap-2">
                                         {investment_criteria.geographies?.map((g) => (
                                             <Badge key={g}>
-                                                <MapPin size={10} className="inline mr-2 text-sky-400/60" />
+                                                <MapPin size={10} className="inline mr-2 text-accent/60" />
                                                 {g}
                                             </Badge>
                                         ))}
@@ -344,10 +344,10 @@ const VCProfile = () => {
                                             href={co.url}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="group px-4 py-4 rounded-xl border border-border/10 bg-muted/20 hover:bg-sky-500/5 hover:border-sky-500/20 transition-all flex items-center justify-between"
+                                            className="group px-4 py-4 rounded-xl border border-border/10 bg-muted/20 hover:bg-accent/5 hover:border-accent/20 transition-all flex items-center justify-between"
                                         >
                                             <span className="text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors">{co.name}</span>
-                                            <ArrowUpRight size={14} className="text-muted-foreground group-hover:text-sky-400 transition-colors" />
+                                            <ArrowUpRight size={14} className="text-muted-foreground group-hover:text-accent transition-colors" />
                                         </a>
                                     ))}
                                 </div>
@@ -363,12 +363,12 @@ const VCProfile = () => {
                                     <span className="text-muted-foreground text-sm">Friendliness Score</span>
                                     <div className="text-right">
                                         <span className="text-3xl font-black text-foreground">{contact_and_access.accessibility?.founder_friendliness_score}</span>
-                                        <span className="text-slate-500 font-bold ml-1">/10</span>
+                                        <span className="text-muted-foreground font-bold ml-1">/10</span>
                                     </div>
                                 </div>
                                 <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
                                     <div
-                                        className="h-full bg-gradient-to-r from-sky-500 to-indigo-500 rounded-full"
+                                        className="h-full bg-gradient-to-r from-accent to-secondary rounded-full"
                                         style={{ width: `${(contact_and_access.accessibility?.founder_friendliness_score || 0) * 10}%` }}
                                     />
                                 </div>
@@ -409,7 +409,7 @@ const VCProfile = () => {
                                 </div>
 
                                 <div className="flex items-start gap-4">
-                                    <div className="p-3 rounded-xl bg-sky-500/10 text-sky-400">
+                                    <div className="p-3 rounded-xl bg-accent/10 text-accent">
                                         <Clock size={18} />
                                     </div>
                                     <div>
@@ -419,7 +419,7 @@ const VCProfile = () => {
                                 </div>
 
                                 <div className="flex items-start gap-4">
-                                    <div className="p-3 rounded-xl bg-indigo-500/10 text-indigo-400">
+                                    <div className="p-3 rounded-xl bg-secondary/10 text-secondary">
                                         <CheckCircle2 size={18} />
                                     </div>
                                     <div>
@@ -434,7 +434,7 @@ const VCProfile = () => {
                             <div className="space-y-4">
                                 {contact_and_access.channels?.general_email && (
                                     <a href={`mailto:${contact_and_access.channels.general_email}`} className="flex items-center gap-4 group p-3 rounded-xl hover:bg-muted/10 transition-colors">
-                                        <div className="p-2 rounded-lg bg-muted/10 text-muted-foreground group-hover:text-sky-400 transition-colors">
+                                        <div className="p-2 rounded-lg bg-muted/10 text-muted-foreground group-hover:text-accent transition-colors">
                                             <Mail size={16} />
                                         </div>
                                         <span className="text-xs font-medium text-muted-foreground group-hover:text-foreground transition-colors truncate">
@@ -473,7 +473,7 @@ const VCProfile = () => {
                         </GlassCard>
 
                         <div className="px-4 py-2 space-y-2">
-                            <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-widest text-slate-600">
+                            <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
                                 <span>Intelligence Integrity</span>
                                 <span className="flex items-center gap-1.5 text-emerald-500/60">
                                     <Zap size={10} /> {metadata.confidence_scores?.scraped_facts}%

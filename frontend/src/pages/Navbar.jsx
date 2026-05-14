@@ -49,13 +49,11 @@ const Navbar = () => {
             : "text-muted-foreground hover:text-foreground"
         } group`;
 
-    const activeIndicator = "absolute -bottom-1 left-0 w-full h-0.5 bg-primary rounded-full shadow-[0_0_8px_rgba(59,130,246,0.6)] scale-x-100 transition-transform duration-300";
-    const inactiveIndicator = "absolute -bottom-1 left-0 w-full h-0.5 bg-blue-500 rounded-full scale-x-0 group-hover:scale-x-100 transition-transform duration-300";
+    const activeIndicator = "absolute -bottom-1 left-0 w-full h-0.5 bg-accent rounded-full scale-x-100 transition-transform duration-300";
+    const inactiveIndicator = "absolute -bottom-1 left-0 w-full h-0.5 bg-accent rounded-full scale-x-0 group-hover:scale-x-100 transition-transform duration-300";
 
     return (
-        <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-500
-             "bg-background backdrop-blur-xl border-b border-foreground/5 py-3 shadow-2xl shadow-primary/5"
-            `}>
+        <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 glass-card border-x-0 border-t-0 ${scrolled ? "py-3 shadow-lg" : "py-4 shadow-sm"}`}>
             <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
 
                 {/* BRAND */}
@@ -63,11 +61,11 @@ const Navbar = () => {
                     to="/"
                     className="flex items-center gap-2.5 group transition-transform hover:scale-[1.02]"
                 >
-                    <div className="h-9 w-9 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center shadow-lg shadow-blue-600/20 group-hover:shadow-blue-600/40 transition-all">
-                        <Activity className="text-white w-5 h-5" />
+                    <div className="h-9 w-9 bg-accent rounded-2xl flex items-center justify-center shadow-sm group-hover:shadow-md transition-all">
+                        <Activity className="text-white w-5 h-5" strokeWidth={1.8} />
                     </div>
                     <span className="text-xl font-bold tracking-tighter text-foreground">
-                        PITCH<span className="text-primary">DEKH</span>
+                        PITCH<span className="text-accent">DEKH</span>
                     </span>
                 </Link>
 
@@ -80,7 +78,7 @@ const Navbar = () => {
                         onMouseLeave={() => setSamplesDropdownOpen(false)}
                     >
                         <button className="relative px-3 py-2 text-sm font-semibold tracking-tight transition-all duration-300 flex items-center gap-2 text-muted-foreground hover:text-foreground group">
-                            <Download size={18} className="text-slate-500" />
+                            <Download size={18} className="text-muted-foreground" />
                             <span>Sample Pitches</span>
                             <ChevronDown size={16} className={`transition-transform duration-300 ${samplesDropdownOpen ? 'rotate-180' : ''}`} />
                         </button>
@@ -98,8 +96,8 @@ const Navbar = () => {
                                         onClick={() => handleDownload(pitch.file)}
                                         className="w-full flex items-start gap-3 p-3 rounded-xl hover:bg-muted/50 transition-all text-left group/item"
                                     >
-                                        <div className="flex-shrink-0 h-10 w-10 rounded-lg bg-blue-500/10 flex items-center justify-center group-hover/item:bg-blue-500/20 transition-all">
-                                            <FileText size={20} className="text-blue-400" />
+                                        <div className="flex-shrink-0 h-10 w-10 rounded-lg bg-accent/10 flex items-center justify-center group-hover/item:bg-accent/20 transition-all">
+                                            <FileText size={20} className="text-accent" />
                                         </div>
                                         <div className="flex-1 min-w-0">
                                             <p className="text-sm font-semibold text-foreground truncate">{pitch.name}</p>
@@ -118,7 +116,7 @@ const Navbar = () => {
                                 <NavLink to="/pitches" className={navLinkClass}>
                                     {({ isActive }) => (
                                         <>
-                                            <LayoutDashboard size={18} className={isActive ? "text-blue-400" : "text-slate-500"} />
+                                            <LayoutDashboard size={18} className={isActive ? "text-accent" : "text-muted-foreground"} />
                                             <span>Pitches</span>
                                             <span className={isActive ? activeIndicator : inactiveIndicator} />
                                         </>
@@ -127,7 +125,7 @@ const Navbar = () => {
                                 <NavLink to="/vcs" className={navLinkClass}>
                                     {({ isActive }) => (
                                         <>
-                                            <Database size={18} className={isActive ? "text-blue-400" : "text-slate-500"} />
+                                            <Database size={18} className={isActive ? "text-accent" : "text-muted-foreground"} />
                                             <span>Investors</span>
                                             <span className={isActive ? activeIndicator : inactiveIndicator} />
                                         </>
@@ -136,7 +134,7 @@ const Navbar = () => {
                                 {/* <NavLink to="/matches" className={navLinkClass}>
                                     {({ isActive }) => (
                                         <>
-                                            <Zap size={18} className={isActive ? "text-blue-400" : "text-slate-500"} />
+                                            <Zap size={18} className={isActive ? "text-accent" : "text-muted-foreground"} />
                                             <span>Matches</span>
                                             <span className={isActive ? activeIndicator : inactiveIndicator} />
                                         </>
@@ -144,7 +142,7 @@ const Navbar = () => {
                                 </NavLink> */}
                             </div>
 
-                            <div className="h-4 w-px bg-slate-800/50 mx-2" />
+                            <div className="h-4 w-px bg-border mx-2" />
 
                             <div className="flex items-center gap-3">
                                 <button
@@ -176,13 +174,13 @@ const Navbar = () => {
                         <div className="flex items-center gap-5">
                             <Link
                                 to="/login"
-                                className="text-sm font-bold text-slate-400 hover:text-white transition-colors"
+                                className="text-sm font-bold text-muted-foreground hover:text-foreground transition-colors"
                             >
                                 Login
                             </Link>
                             <Link
                                 to="/signup"
-                                className="px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-bold transition-all shadow-lg shadow-blue-600/20 hover:shadow-blue-600/40 hover:-translate-y-0.5"
+                                className="px-6 py-2.5 rounded-2xl bg-primary hover:bg-primary/90 text-white text-sm font-bold transition-all shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30 hover:-translate-y-0.5"
                             >
                                 Get Started
                             </Link>
@@ -213,8 +211,8 @@ const Navbar = () => {
                                     onClick={() => { handleDownload(pitch.file); setOpen(false); }}
                                     className="flex items-start gap-3 p-4 rounded-2xl bg-muted/40 border border-border/50 text-foreground hover:bg-muted/60 transition-all text-left"
                                 >
-                                    <div className="h-10 w-10 rounded-xl bg-blue-500/10 flex items-center justify-center flex-shrink-0">
-                                        <FileText size={20} className="text-blue-400" />
+                                    <div className="h-10 w-10 rounded-xl bg-accent/10 flex items-center justify-center flex-shrink-0">
+                                        <FileText size={20} className="text-accent" />
                                     </div>
                                     <div className="flex-1 min-w-0">
                                         <p className="text-sm font-semibold truncate">{pitch.name}</p>
@@ -232,20 +230,20 @@ const Navbar = () => {
                                 <p className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] px-4">Navigation</p>
                                 <div className="grid gap-2">
                                     <NavLink to="/pitches" onClick={() => setOpen(false)} className="flex items-center gap-4 p-4 rounded-2xl bg-muted/40 border border-border/50 text-foreground font-semibold hover:bg-muted/60 transition-all">
-                                        <div className="h-10 w-10 rounded-xl bg-blue-500/10 flex items-center justify-center">
-                                            <LayoutDashboard size={20} className="text-blue-400" />
+                                        <div className="h-10 w-10 rounded-xl bg-accent/10 flex items-center justify-center">
+                                            <LayoutDashboard size={20} className="text-accent" />
                                         </div>
                                         Pitches
                                     </NavLink>
                                     <NavLink to="/vcs" onClick={() => setOpen(false)} className="flex items-center gap-4 p-4 rounded-2xl bg-muted/40 border border-border/50 text-foreground font-semibold hover:bg-muted/60 transition-all">
-                                        <div className="h-10 w-10 rounded-xl bg-blue-500/10 flex items-center justify-center">
-                                            <Database size={20} className="text-blue-400" />
+                                        <div className="h-10 w-10 rounded-xl bg-accent/10 flex items-center justify-center">
+                                            <Database size={20} className="text-accent" />
                                         </div>
                                         Investors
                                     </NavLink>
                                     {/* <NavLink to="/matches" onClick={() => setOpen(false)} className="flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/5 text-slate-200 font-semibold hover:bg-white/10 transition-all">
-                                        <div className="h-10 w-10 rounded-xl bg-blue-500/10 flex items-center justify-center">
-                                            <Zap size={20} className="text-blue-400" />
+                                        <div className="h-10 w-10 rounded-xl bg-accent/10 flex items-center justify-center">
+                                            <Zap size={20} className="text-accent" />
                                         </div>
                                         Matches
                                     </NavLink> */}
@@ -259,8 +257,8 @@ const Navbar = () => {
                                         onClick={() => { setOpen(false); navigate("/profile"); }}
                                         className="w-full flex items-center gap-4 p-4 rounded-2xl bg-muted/40 border border-border/50 text-foreground font-semibold hover:bg-muted/60 transition-all text-left"
                                     >
-                                        <div className="h-10 w-10 rounded-xl bg-slate-500/10 flex items-center justify-center">
-                                            <User size={20} className="text-slate-400" />
+                                        <div className="h-10 w-10 rounded-xl bg-secondary/10 flex items-center justify-center">
+                                            <User size={20} className="text-secondary" />
                                         </div>
                                         My Profile
                                     </button>
@@ -281,7 +279,7 @@ const Navbar = () => {
                             <Link to="/login" onClick={() => setOpen(false)} className="p-5 text-center rounded-2xl bg-muted/40 border border-border/50 text-foreground font-bold hover:bg-muted/60 transition-all">
                                 Login
                             </Link>
-                            <Link to="/signup" onClick={() => setOpen(false)} className="p-5 text-center rounded-2xl bg-blue-600 text-white font-bold shadow-lg shadow-blue-600/20 active:scale-[0.98] transition-all">
+                            <Link to="/signup" onClick={() => setOpen(false)} className="p-5 text-center rounded-2xl bg-primary text-background font-bold shadow-sm active:scale-[0.98] transition-all">
                                 Create Account
                             </Link>
                         </div>
