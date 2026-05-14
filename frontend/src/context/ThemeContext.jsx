@@ -3,11 +3,11 @@ import { createContext, useContext, useEffect, useState } from "react";
 const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
-    // Check localStorage or system preference
+    // Light "Financial Blue" is the default; saved preference still wins.
     const [theme, setTheme] = useState(() => {
         const savedTheme = localStorage.getItem("theme");
         if (savedTheme) return savedTheme;
-        return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        return "light";
     });
 
     useEffect(() => {

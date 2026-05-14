@@ -83,20 +83,20 @@ const ProfilePage = () => {
                         {/* Browse Investors */}
                         <div
                             onClick={() => navigate("/vcs")}
-                            className="group relative p-8 rounded-3xl border border-border/50 bg-muted/40 hover:bg-muted/60 overflow-hidden cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:border-sky-500/30"
+                            className="group relative p-8 rounded-3xl border border-border/50 bg-muted/40 hover:bg-muted/60 overflow-hidden cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:border-accent/30"
                         >
                             <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
                                 <Building2 size={120} />
                             </div>
                             <div className="relative z-10 space-y-4">
-                                <div className="h-14 w-14 rounded-2xl bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-500 mb-4">
+                                <div className="h-14 w-14 rounded-2xl bg-accent/10 border border-accent/20 flex items-center justify-center text-accent mb-4">
                                     <Building2 size={28} />
                                 </div>
                                 <h3 className="text-2xl font-bold text-foreground">Browse Investors</h3>
                                 <p className="text-muted-foreground font-medium">
                                     Explore VC profiles, investment thesis, and find potential partners.
                                 </p>
-                                <div className="pt-4 flex items-center gap-2 text-sky-500 font-bold text-sm">
+                                <div className="pt-4 flex items-center gap-2 text-accent font-bold text-sm">
                                     Find Investors <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
                                 </div>
                             </div>

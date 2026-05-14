@@ -104,7 +104,7 @@ const MatchDetailsModal = ({ match, onClose }) => {
                             </div>
 
                             <div className="p-5 rounded-xl bg-muted/40 border border-border">
-                                <h4 className="flex items-center gap-2 text-sm font-semibold text-blue-500 mb-3">
+                                <h4 className="flex items-center gap-2 text-sm font-semibold text-accent mb-3">
                                     <Briefcase size={16} /> Sector Fit
                                 </h4>
                                 <p className="text-sm text-muted-foreground leading-relaxed">

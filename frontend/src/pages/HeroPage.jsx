@@ -2,7 +2,7 @@ import { useState } from "react";
 import UploadPitchModal from "./UploadPitchModal";
 import UploadVCLinkModal from "./UploadVCLinkModal";
 import { useAuth } from "../context/AuthContext";
-import { Brain, Target, BarChart3, Lock, Zap, ArrowRight, MousePointer2, Activity, ChevronRight, BarChart, ShieldCheck, Lightbulb } from "lucide-react";
+import { Brain, Target, BarChart3, Lock, Zap, ArrowRight, Activity, ChevronRight, BarChart, ShieldCheck, Lightbulb } from "lucide-react";
 
 const HeroPage = () => {
     const { user } = useAuth();
@@ -14,207 +14,166 @@ const HeroPage = () => {
             title: "Market Intelligence",
             desc: "Understand competitor gaps and industry benchmarks through deep-scanning AI.",
             icon: Brain,
-            color: "primary",
         },
         {
             title: "Investor Scoring",
             desc: "View objective analysis of your unit economics from a VC's perspective.",
             icon: Target,
-            color: "secondary",
         },
         {
             title: "Strategic Roadmap",
             desc: "AI-generated expansion milestones tailored to your specific market segment.",
             icon: BarChart3,
-            color: "primary",
         },
         {
             title: "Data Sovereignty",
             desc: "Enterprise-grade encryption keeps your deck and analysis strictly private.",
             icon: Lock,
-            color: "muted-foreground",
         },
     ];
 
     return (
-        <div className="relative min-h-screen bg-background transition-colors duration-500 overflow-hidden flex flex-col font-sans">
-            {/* AMBIENT BACKGROUND SYSTEM */}
-            <div className="absolute inset-0 pointer-events-none">
-                {/* Layer 1: Mesh Glows */}
-                <div className="absolute top-[-10%] right-[-10%] w-[60%] h-[60%] bg-primary/10 rounded-full blur-[160px] opacity-40 animate-pulse" />
-                <div className="absolute bottom-[-10%] left-[-10%] w-[60%] h-[60%] bg-secondary/10 rounded-full blur-[160px] opacity-30 animate-pulse delay-700" />
-
-                {/* Layer 2: Subtle Grid Pattern */}
-                <div className="absolute inset-0 bg-[linear-gradient(to_right,var(--border)_1px,transparent_1px),linear-gradient(to_bottom,var(--border)_1px,transparent_1px)] bg-[size:6rem_6rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-20" />
-
-                {/* Layer 3: Noise Texture */}
-                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.08] mix-blend-overlay" />
-            </div>
+        <div className="min-h-screen bg-background flex flex-col">
 
             {/* MAIN HERO SECTION */}
-            <main className="flex-grow flex items-center justify-center relative z-10 px-6 pt-32 pb-20">
-                <div className="max-w-7xl mx-auto w-full grid lg:grid-cols-2 gap-20 lg:gap-32 items-center">
+            <main className="flex-grow flex items-center justify-center px-6 pt-32 pb-20">
+                <div className="max-w-7xl mx-auto w-full grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
 
-                    {/* LEFT CONTENT: THE NARRATIVE */}
-                    <div className="space-y-12 text-center lg:text-left">
-                        <div className="inline-flex items-center gap-3 px-1 py-1 pr-4 rounded-full bg-foreground/5 border border-border/50 backdrop-blur-xl mx-auto lg:mx-0 group hover:bg-foreground/[0.08] transition-colors cursor-default">
-                            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-transparent text-[10px] font-bold text-white"><Lightbulb /></span>
-                            <span className="text-xs font-semibold text-muted-foreground tracking-tight">Powerfull Real-time Analysis Active</span>
-                            <ChevronRight className="w-3.5 h-3.5 text-muted-foreground group-hover:translate-x-0.5 transition-transform" />
+                    {/* LEFT: NARRATIVE */}
+                    <div className="space-y-10 text-center lg:text-left">
+                        <div className="pill mx-auto lg:mx-0 text-muted-foreground">
+                            <Lightbulb className="w-3.5 h-3.5 text-accent" />
+                            <span>Real-time analysis active</span>
                         </div>
 
                         <div className="space-y-6">
-                            <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-foreground leading-[1.08] tracking-tight">
+                            <h1 className="text-5xl md:text-6xl lg:text-[4.5rem] font-light text-foreground">
                                 Authority in your <br className="hidden md:block" />
-                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-primary">Market Narrative.</span>
+                                Market Narrative.
                             </h1>
 
-                            <p className="text-lg md:text-xl text-muted-foreground max-w-xl mx-auto lg:mx-0 leading-relaxed font-medium">
-                                The intelligent co-pilot for high-growth founders. Analyze pitch decks, bridge market gaps, and align with global VCs using institutional-grade AI.
+                            <p className="text-lg text-muted-foreground max-w-xl mx-auto lg:mx-0 leading-relaxed">
+                                The intelligent co-pilot for high-growth founders. Analyze pitch decks,
+                                bridge market gaps, and align with global VCs using institutional-grade AI.
                             </p>
                         </div>
 
-                        <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-5">
+                        <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
                             <button
                                 onClick={() => setOpenUpload(true)}
-                                className="w-full sm:w-auto px-10 py-5 rounded-2xl bg-primary hover:bg-primary/90 text-white font-bold text-lg transition-all hover:-translate-y-1 flex items-center justify-center gap-3 group active:scale-[0.98]"
+                                className="w-full sm:w-auto px-8 py-4 rounded-full bg-primary text-background font-semibold flex items-center justify-center gap-2 hover:opacity-90 transition-opacity"
                             >
                                 Analyze Your Deck
-                                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                                <ArrowRight className="w-4 h-4" />
                             </button>
 
                             {user?.app_metadata?.role === "admin" && (
                                 <button
                                     onClick={() => setOpenVCUpload(true)}
-                                    className="w-full sm:w-auto px-10 py-5 rounded-2xl bg-muted border border-border text-muted-foreground font-bold hover:bg-muted/80 hover:text-foreground transition-all flex items-center justify-center gap-3"
+                                    className="w-full sm:w-auto px-8 py-4 rounded-full border border-foreground/15 text-foreground font-semibold hover:bg-foreground/[0.04] transition-colors"
                                 >
                                     Institutional Access
                                 </button>
                             )}
                         </div>
 
-                        {/* Social Proof / Trusted Ribbon */}
-                        <div className="flex flex-col items-center lg:items-start gap-6 pt-4">
-                            <div className="flex -space-x-3 items-center">
-                                {[1, 2, 3, 4, 5].map((i) => (
-                                    <div key={i} className="h-10 w-10 rounded-full border-2 border-background bg-muted overflow-hidden ring-1 ring-border shadow-xl transition-transform hover:scale-110 hover:z-20 cursor-pointer">
-                                        <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${i + i * 15}`} alt="VCO" />
-                                    </div>
-                                ))}
-                                <div className="pl-6">
-                                    <p className="text-xs text-muted-foreground font-bold uppercase tracking-widest">Powered founders at</p>
-                                    <div className="flex items-center gap-4 opacity-40 grayscale select-none mt-1">
-                                        <span className="font-black text-foreground italic text-sm">SEQUOIA</span>
-                                        <span className="font-black text-foreground italic text-sm">ACCEL</span>
-                                        <span className="font-black text-foreground italic text-sm">YC</span>
-                                    </div>
+                        {/* Social Proof — clean editorial trust strip */}
+                        <div className="flex flex-col items-center lg:items-start gap-5 pt-4">
+                            <span className="pill text-muted-foreground">
+                                <span className="w-1.5 h-1.5 rounded-full bg-success" />
+                                2,400+ decks analyzed
+                            </span>
+                            <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-5">
+                                <span className="text-[11px] uppercase tracking-[0.16em] text-muted-foreground font-medium">
+                                    Founders backed by
+                                </span>
+                                <div className="flex items-center gap-3.5 text-sm font-medium text-foreground/70">
+                                    <span>Sequoia</span>
+                                    <span className="w-1 h-1 rounded-full bg-foreground/25" />
+                                    <span>Accel</span>
+                                    <span className="w-1 h-1 rounded-full bg-foreground/25" />
+                                    <span>Y&nbsp;Combinator</span>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    {/* RIGHT CONTENT: THE VISUAL ENGINE */}
-                    <div className="hidden lg:block relative order-first lg:order-last group">
-                        {/* THE DASHBOARD PREVIEW */}
-                        <div className="relative z-10 rounded-[3rem] border border-border bg-muted/40 backdrop-blur-3xl p-1 shadow-2xl overflow-hidden min-h-[520px] transition-all duration-700 hover:border-primary/30">
-                            {/* Inner Glass Content */}
-                            <div className="h-full w-full rounded-[2.9rem] bg-gradient-to-br from-muted/60 to-muted-foreground/10 p-10 flex flex-col justify-between">
+                    {/* RIGHT: FLAT PREVIEW */}
+                    <div className="hidden lg:block">
+                        <div className="card-soft p-8 space-y-6">
 
-                                {/* Top Header: AI Status */}
-                                <div className="flex items-center justify-between border-b border-border/50 pb-8">
-                                    <div className="flex items-center gap-4">
-                                        <div className="h-12 w-12 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary shadow-inner">
-                                            <Activity className="w-6 h-6" />
-                                        </div>
-                                        <div>
-                                            <h4 className="text-foreground font-bold tracking-tight">AI Engine v2.0</h4>
-                                            <div className="flex items-center gap-2">
-                                                <div className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
-                                                <span className="text-[10px] uppercase font-black text-muted-foreground tracking-tighter">Scanning active</span>
-                                            </div>
-                                        </div>
+                            {/* Header row */}
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-3">
+                                    <div className="h-11 w-11 rounded-2xl bg-accent/12 flex items-center justify-center text-accent">
+                                        <Activity className="w-5 h-5" strokeWidth={1.6} />
                                     </div>
-                                    <div className="px-4 py-2 rounded-xl bg-foreground/5 border border-border text-muted-foreground text-[10px] font-bold tracking-widest uppercase">
-                                        Phase 04: Market Gap
-                                    </div>
-                                </div>
-
-                                {/* Main Visual Area: Scanning Logic */}
-                                <div className="flex-grow py-12 flex flex-col items-center justify-center text-center space-y-8">
-                                    <div className="relative">
-                                        <div className="absolute inset-0 bg-primary/20 blur-[60px] rounded-full animate-pulse" />
-                                        <div className="relative h-32 w-32 rounded-[2.5rem] bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center border border-primary/30 shadow-2xl group-hover:scale-110 transition-transform duration-500 ring-8 ring-foreground/5">
-                                            <Zap className="w-16 h-16 text-primary fill-primary/10" />
-                                        </div>
-                                    </div>
-                                    <div className="space-y-3 max-w-[280px]">
-                                        <p className="text-foreground text-xl font-bold tracking-tight">Deep Benchmarking...</p>
-                                        <div className="h-1.5 w-full bg-foreground/5 rounded-full overflow-hidden">
-                                            <div className="h-full w-[72%] bg-gradient-to-r from-primary to-secondary rounded-full animate-progress-glow shadow-[0_0_10px_rgba(59,130,246,0.5)]" />
-                                        </div>
-                                        <div className="flex justify-between items-center text-[10px] font-bold text-muted-foreground uppercase tracking-tighter">
-                                            <span>Analyzing Sentiment</span>
-                                            <span className="text-primary">72%</span>
+                                    <div>
+                                        <h4 className="text-foreground font-semibold text-sm">AI Engine v2.0</h4>
+                                        <div className="flex items-center gap-1.5">
+                                            <span className="w-1.5 h-1.5 rounded-full bg-success" />
+                                            <span className="text-[10px] uppercase font-medium text-muted-foreground tracking-wider">Scanning active</span>
                                         </div>
                                     </div>
                                 </div>
+                                <span className="pill text-muted-foreground">Phase 04</span>
+                            </div>
 
-                                {/* Bottom Stats: Insights */}
-                                <div className="grid grid-cols-2 gap-4 pt-8 border-t border-border/50">
-                                    <div className="p-4 rounded-2xl bg-foreground/5 border border-border/50 space-y-2">
-                                        <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-tighter">Market Potential</p>
-                                        <div className="flex items-center justify-between">
-                                            <span className="text-foreground font-bold">Top 5%</span>
-                                            <ShieldCheck className="w-4 h-4 text-success" />
-                                        </div>
+                            {/* Dark contrast panel */}
+                            <div className="card-dark p-8 flex flex-col items-center text-center gap-5">
+                                <div className="h-20 w-20 rounded-3xl bg-white/10 flex items-center justify-center">
+                                    <Zap className="w-9 h-9 text-white" />
+                                </div>
+                                <div className="w-full max-w-[280px] space-y-3">
+                                    <p className="text-white text-lg font-medium">Deep Benchmarking</p>
+                                    <div className="h-1.5 w-full bg-white/15 rounded-full overflow-hidden">
+                                        <div className="h-full w-[72%] bg-white rounded-full animate-progress-glow" />
                                     </div>
-                                    <div className="p-4 rounded-2xl bg-foreground/5 border border-border/50 space-y-2">
-                                        <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-tighter">Investor Match</p>
-                                        <div className="flex items-center justify-between">
-                                            <span className="text-foreground font-bold">Strong</span>
-                                            <BarChart className="w-4 h-4 text-primary" />
-                                        </div>
+                                    <div className="flex justify-between text-[10px] font-medium text-white/55 uppercase tracking-wider">
+                                        <span>Analyzing sentiment</span>
+                                        <span className="text-white">72%</span>
                                     </div>
                                 </div>
                             </div>
 
-                            {/* Decorative Cursor Simulation */}
-                            <div className="absolute top-[40%] right-[15%] group-hover:translate-x-4 group-hover:-translate-y-4 transition-transform duration-1000 pointer-events-none opacity-0 group-hover:opacity-100">
-                                <div className="flex items-center gap-3">
-                                    <div className="bg-foreground text-background px-3 py-1.5 rounded-full text-[10px] font-bold uppercase">Refining TAM</div>
-                                    <MousePointer2 className="text-foreground fill-foreground rotate-[-30deg]" size={24} />
+                            {/* Stat tiles */}
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="rounded-2xl bg-background p-4 space-y-2">
+                                    <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">Market Potential</p>
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-foreground font-semibold">Top 5%</span>
+                                        <ShieldCheck className="w-4 h-4 text-success" />
+                                    </div>
+                                </div>
+                                <div className="card-dark p-4 space-y-2">
+                                    <p className="text-[10px] font-medium text-white/55 uppercase tracking-wider">Investor Match</p>
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-white font-semibold">Strong</span>
+                                        <BarChart className="w-4 h-4 text-white" />
+                                    </div>
                                 </div>
                             </div>
                         </div>
-
-                        {/* Background Layer Glows */}
-                        <div className="absolute -top-12 -right-12 w-80 h-80 bg-primary/5 rounded-full blur-[100px] -z-0 opacity-40 group-hover:opacity-100 transition-opacity" />
-                        <div className="absolute -bottom-12 -left-12 w-80 h-80 bg-secondary/5 rounded-full blur-[100px] -z-0 opacity-30 group-hover:opacity-80 transition-opacity" />
                     </div>
                 </div>
             </main>
 
-            {/* FEATURE GRID: THE CAPABILITIES */}
+            {/* FEATURE GRID */}
             <div className="max-w-7xl mx-auto w-full px-6 pb-32">
-                <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     {features.map((feature, i) => (
-                        <div key={i} className="group p-10 rounded-[2.5rem] bg-muted/40 border border-border/50 hover:border-primary/20 transition-all hover:-translate-y-2 backdrop-blur-3xl relative overflow-hidden">
-                            {/* Accent Glow */}
-                            <div className="absolute -top-24 -right-24 w-48 h-48 bg-primary/5 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity" />
-
-                            <div className="relative">
-                                <div className={`h-16 w-16 rounded-2xl bg-foreground/[0.03] border border-border/50 flex items-center justify-center mb-8 group-hover:scale-110 transition-transform duration-500 shadow-inner`}>
-                                    <feature.icon className={`text-primary w-8 h-8`} />
+                        <div key={i} className="card-soft p-8 glide-lift group">
+                            <div className="h-14 w-14 rounded-2xl bg-accent/12 flex items-center justify-center mb-6 group-hover:bg-accent/20 transition-colors">
+                                <feature.icon className="text-accent w-6 h-6" strokeWidth={1.6} />
+                            </div>
+                            <div className="space-y-3">
+                                <div className="flex items-center justify-between">
+                                    <h4 className="text-foreground font-semibold text-lg">{feature.title}</h4>
+                                    <ChevronRight className="text-muted-foreground group-hover:text-accent group-hover:translate-x-0.5 transition-all" size={18} />
                                 </div>
-                                <div className="space-y-4">
-                                    <div className="flex items-center justify-between">
-                                        <h4 className="text-foreground font-bold text-xl tracking-tight">{feature.title}</h4>
-                                        <ChevronRight className="text-muted-foreground group-hover:text-primary transition-colors" size={20} />
-                                    </div>
-                                    <p className="text-muted-foreground text-sm font-medium leading-[1.65] group-hover:text-foreground transition-colors">
-                                        {feature.desc}
-                                    </p>
-                                </div>
+                                <p className="text-muted-foreground text-sm leading-relaxed">
+                                    {feature.desc}
+                                </p>
                             </div>
                         </div>
                     ))}
@@ -222,27 +181,8 @@ const HeroPage = () => {
             </div>
 
             {/* MODALS */}
-            <UploadPitchModal
-                open={openUpload}
-                onClose={() => setOpenUpload(false)}
-            />
-            <UploadVCLinkModal
-                open={openVCUpload}
-                onClose={() => setOpenVCUpload(false)}
-            />
-
-            {/* Custom Animations in Inline Style for simplicity in this project context */}
-            {/* <style dangerouslySetInnerHTML={{
-                __html: `
-                @keyframes progress-glow {
-                    0% { opacity: 0.8; filter: brightness(1); }
-                    50% { opacity: 1; filter: brightness(1.3); }
-                    100% { opacity: 0.8; filter: brightness(1); }
-                }
-                .animate-progress-glow {
-                    animation: progress-glow 2s infinite ease-in-out;
-                }
-            `}} /> */}
+            <UploadPitchModal open={openUpload} onClose={() => setOpenUpload(false)} />
+            <UploadVCLinkModal open={openVCUpload} onClose={() => setOpenVCUpload(false)} />
         </div>
     );
 };
