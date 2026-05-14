@@ -15,7 +15,7 @@ export const vcQueryGenerator = async (vcProfile) => {
 Return JSON only.`;
 
     const model = genAI.getGenerativeModel({
-        model: "gemini-3-pro-preview",
+        model: "gemini-3.1-flash-lite",
         systemInstruction: TAVILY_SEARCH_SYSTEM_PROMPT,
         generationConfig: {
             maxOutputTokens: 2048,
